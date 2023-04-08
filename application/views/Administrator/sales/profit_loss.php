@@ -108,7 +108,6 @@
                                 <strong>Sales Date: </strong> {{ data.SaleMaster_SaleDate }} |
                                 <strong>Customer: </strong> {{ data.Customer_Name }} |
                                 <strong>Discount: </strong> {{ data.SaleMaster_TotalDiscountAmount | decimal }} |
-                                <strong>Customer Discount: </strong> {{ data.customer_discount | decimal }} |
                                 <strong>VAT: </strong> {{ data.SaleMaster_TaxAmount | decimal }} |
                                 <strong>Transport Cost: </strong> {{ data.SaleMaster_Freight | decimal }}
                             </td>
@@ -183,13 +182,13 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        <!-- <tr>
                             <td colspan="4" style="text-align:right;">Customer Discount (-)</td>
                             <td colspan="2"></td>
                             <td style="text-align:right;">
-                                {{ totalCustomerDiscount = reportData.reduce((prev, cur) => { return prev + parseFloat(cur.customer_discount) }, 0).toFixed(2) }}
+                                {{ otherIncomeExpense.customer_payment_discount | decimal }}
                             </td>
-                        </tr>
+                        </tr> -->
 
                         <tr>
                             <td colspan="4" style="text-align:right;">Total Returned Value (-)</td>
@@ -239,7 +238,7 @@
                             <td colspan="2"></td>
                             <td style="text-align:right;">
                                 {{  ((parseFloat(totalProfit) + parseFloat(totalVat) + parseFloat(otherIncome)) - 
-									(parseFloat(totalDiscount) + parseFloat(totalCustomerDiscount) + parseFloat(otherIncomeExpense.returned_amount) + parseFloat(otherIncomeExpense.damaged_amount) + parseFloat(otherIncomeExpense.expense) + parseFloat(otherIncomeExpense.employee_payment) + parseFloat(otherIncomeExpense.profit_distribute) + parseFloat(otherIncomeExpense.loan_interest) + parseFloat(otherIncomeExpense.assets_sales_profit_loss))).toFixed(2) }}
+									(parseFloat(totalDiscount) + parseFloat(otherIncomeExpense.returned_amount) + parseFloat(otherIncomeExpense.damaged_amount) + parseFloat(otherIncomeExpense.expense) + parseFloat(otherIncomeExpense.employee_payment) + parseFloat(otherIncomeExpense.profit_distribute) + parseFloat(otherIncomeExpense.loan_interest) + parseFloat(otherIncomeExpense.assets_sales_profit_loss))).toFixed(2) }}
                             </td>
                         </tr>
                     </tfoot>

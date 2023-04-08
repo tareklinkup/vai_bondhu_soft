@@ -1831,13 +1831,10 @@ class Sales extends CI_Controller {
                 sm.*,
                 c.Customer_Code,
                 c.Customer_Name,
-                c.Customer_Mobile,
-                cp.discount as customer_discount
+                c.Customer_Mobile
             from tbl_salesmaster sm
-            join tbl_customer c on c.Customer_SlNo = sm.SalseCustomer_IDNo
-            join tbl_customer_payment cp on cp.CPayment_id = c.Customer_SlNo
+            left join tbl_customer c on c.Customer_SlNo = sm.SalseCustomer_IDNo
             where sm.SaleMaster_branchid = ? 
-            and cp.CPayment_TransactionType = 'CR'
             and sm.Status = 'a'
             $customerClause $dateClause
         ", $this->session->userdata('BRANCHid'))->result();
@@ -1851,7 +1848,7 @@ class Sales extends CI_Controller {
                     (sd.Purchase_Rate * sd.SaleDetails_TotalQuantity) as purchased_amount,
                     (select sd.SaleDetails_TotalAmount - purchased_amount) as profit_loss
                 from tbl_saledetails sd 
-                join tbl_product p on p.Product_SlNo = sd.Product_IDNo
+                left join tbl_product p on p.Product_SlNo = sd.Product_IDNo
                 where sd.SaleMaster_IDNo = ?
             ", $sale->SaleMaster_SlNo)->result();
         }
