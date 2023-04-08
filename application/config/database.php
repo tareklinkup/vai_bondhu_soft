@@ -8,9 +8,9 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	
-  	'username' => 'bigektuw_admin1',
-  	'password' => 'q~ip~M9d40dI',
-  	'database' => 'bigektuw_vai-bondhu-traders',
+  	'username' => 'root',
+  	'password' => '',
+  	'database' => 'vai_bondhu',
 	
 // 	'username' => 'root',
 // 	'password' => '',

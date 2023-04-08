@@ -1268,40 +1268,42 @@ class Sales extends CI_Controller {
     
      function select_customerName()  { 
        ?>
-       <div class="form-group">
-        <label class="col-sm-2 control-label no-padding-right" for="customerID"> Select Customer </label>
-        <div class="col-sm-3">
-            <select name="" id="customerID" data-placeholder="Choose a Customer..." class="chosen-select" >
-                <option value="All">All</option>
-                <?php 
+<div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="customerID"> Select Customer </label>
+    <div class="col-sm-3">
+        <select name="" id="customerID" data-placeholder="Choose a Customer..." class="chosen-select">
+            <option value="All">All</option>
+            <?php 
                 $sql = $this->db->query("SELECT * FROM tbl_customer where Customer_brunchid = '".$this->sbrunch."' AND Customer_Type = 'Local' order by Customer_Name asc");
                 $row = $sql->result();
                 foreach($row as $row){ ?>
 
-                <option value="<?php echo $row->Customer_SlNo; ?>"><?php echo $row->Customer_Name; ?> (<?php echo $row->Customer_Code; ?>)</option>
-                <?php } ?>
-            </select>
-        </div>
+            <option value="<?php echo $row->Customer_SlNo; ?>"><?php echo $row->Customer_Name; ?>
+                (<?php echo $row->Customer_Code; ?>)</option>
+            <?php } ?>
+        </select>
     </div>
-       <?php
+</div>
+<?php
     }
     function select_InvCustomerName()  {
         ?>
-        <div class="form-group">
-            <div class="col-sm-3">
-                <select id="Salestype" class="chosen-select" name="Salestype">
-                    <option value="All">All</option>
-                    <?php
+<div class="form-group">
+    <div class="col-sm-3">
+        <select id="Salestype" class="chosen-select" name="Salestype">
+            <option value="All">All</option>
+            <?php
                     $sql = $this->db->query("SELECT * FROM tbl_customer where Customer_brunchid = '".$this->sbrunch."' AND Customer_Type = 'Local' order by Customer_Name asc");
                     $row = $sql->result();
                     foreach($row as $row){ ?>
 
-                        <option value="<?php echo $row->Customer_SlNo; ?>"><?php echo $row->Customer_Name; ?> (<?php echo $row->Customer_Code; ?>)</option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-        <?php
+            <option value="<?php echo $row->Customer_SlNo; ?>"><?php echo $row->Customer_Name; ?>
+                (<?php echo $row->Customer_Code; ?>)</option>
+            <?php } ?>
+        </select>
+    </div>
+</div>
+<?php
     }
     function sales_customerName()  {
         $id = $this->input->post('customerID');
@@ -1824,16 +1826,18 @@ class Sales extends CI_Controller {
             $dateClause = " and sm.SaleMaster_SaleDate between '$data->dateFrom' and '$data->dateTo'";
         }
 
-
         $sales = $this->db->query("
             select 
                 sm.*,
                 c.Customer_Code,
                 c.Customer_Name,
-                c.Customer_Mobile
+                c.Customer_Mobile,
+                cp.discount as customer_discount
             from tbl_salesmaster sm
             join tbl_customer c on c.Customer_SlNo = sm.SalseCustomer_IDNo
+            join tbl_customer_payment cp on cp.CPayment_id = c.Customer_SlNo
             where sm.SaleMaster_branchid = ? 
+            and cp.CPayment_TransactionType = 'CR'
             and sm.Status = 'a'
             $customerClause $dateClause
         ", $this->session->userdata('BRANCHid'))->result();

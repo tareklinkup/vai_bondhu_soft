@@ -590,6 +590,7 @@ class Account extends CI_Controller {
         $damageClause = "";
         $returnClause = "";
         $purchaseClause = "";
+        $c_discountClause = "";
         if(isset($data->dateFrom) && $data->dateFrom != '' && isset($data->dateTo) && $data->dateTo != ''){
             $transactionDateClause = " and ct.Tr_date between '$data->dateFrom' and '$data->dateTo'";
             $employePaymentDateClause = " and ep.payment_date between '$data->dateFrom' and '$data->dateTo'";
@@ -599,6 +600,7 @@ class Account extends CI_Controller {
             $damageClause = " and d.Damage_Date between '$data->dateFrom' and '$data->dateTo'";
             $returnClause = " and r.SaleReturn_ReturnDate between '$data->dateFrom' and '$data->dateTo'";
             $purchaseClause = " and pm.PurchaseMaster_OrderDate between '$data->dateFrom' and '$data->dateTo'";
+            $c_discountClause = " and cp.CPayment_date between '$data->dateFrom' and '$data->dateTo'";
         }
 
         $result = $this->db->query("

@@ -655,6 +655,13 @@ class Model_Table extends CI_Model{
                 " . ($date == null ? "" : " and cp.CPayment_date < '$date'") . "
                 and cp.CPayment_status = 'a') as cashReceived,
 
+                (select ifnull(sum(cp.discount), 0.00) 
+                from tbl_customer_payment cp 
+                where cp.CPayment_customerID = c.Customer_SlNo 
+                and cp.CPayment_TransactionType = 'CR'
+                " . ($date == null ? "" : " and cp.CPayment_date < '$date'") . "
+                and cp.CPayment_status = 'a') as discount,
+
             (select ifnull(sum(cp.CPayment_amount), 0.00) 
                 from tbl_customer_payment cp 
                 where cp.CPayment_customerID = c.Customer_SlNo 
@@ -669,7 +676,7 @@ class Model_Table extends CI_Model{
                 " . ($date == null ? "" : " and sr.SaleReturn_ReturnDate < '$date'") . "
             ) as returnedAmount,
 
-            (select invoicePaid + cashReceived) as paidAmount,
+            (select invoicePaid + cashReceived + discount) as paidAmount,
 
             (select (billAmount + paidOutAmount) - (paidAmount + returnedAmount)) as dueAmount
             

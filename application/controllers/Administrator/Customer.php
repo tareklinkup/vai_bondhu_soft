@@ -80,6 +80,7 @@ class Customer extends CI_Controller
     }
 
     public function getCustomerPayments(){
+        
         $data = json_decode($this->input->raw_input_stream);
 
         $clauses = "";
@@ -566,6 +567,7 @@ class Customer extends CI_Controller
                 sm.SaleMaster_DueAmount as due,
                 0.00 as returned,
                 0.00 as paid_out,
+                0.00 as discount,
                 0.00 as balance
             from tbl_salesmaster sm
             where sm.SalseCustomer_IDNo = '$data->customerId'
@@ -588,6 +590,7 @@ class Customer extends CI_Controller
                 0.00 as due,
                 0.00 as returned,
                 0.00 as paid_out,
+                discount as discount,
                 0.00 as balance
             from tbl_customer_payment cp
             left join tbl_bank_accounts ba on ba.account_id = cp.account_id
@@ -611,6 +614,7 @@ class Customer extends CI_Controller
                 0.00 as due,
                 0.00 as returned,
                 cp.CPayment_amount as paid_out,
+                0.00 as discount,
                 0.00 as balance
             from tbl_customer_payment cp
             left join tbl_bank_accounts ba on ba.account_id = cp.account_id
@@ -629,6 +633,7 @@ class Customer extends CI_Controller
                 0.00 as due,
                 sr.SaleReturn_ReturnAmount as returned,
                 0.00 as paid_out,
+                0.00 as discount,
                 0.00 as balance
             from tbl_salereturn sr
             join tbl_salesmaster smr on smr.SaleMaster_InvoiceNo  = sr.SaleMaster_InvoiceNo
@@ -641,7 +646,7 @@ class Customer extends CI_Controller
 
         foreach($payments as $key=>$payment){
             $lastBalance = $key == 0 ? $previousDueQuery->previous_due : $payments[$key - 1]->balance;
-            $payment->balance = ($lastBalance + $payment->bill + $payment->paid_out) - ($payment->paid + $payment->returned);
+            $payment->balance = ($lastBalance + $payment->bill + $payment->paid_out) - ($payment->paid + $payment->returned +$payment->discount);
         }
 
         if((isset($data->dateFrom) && $data->dateFrom != null) && (isset($data->dateTo) && $data->dateTo != null)){
